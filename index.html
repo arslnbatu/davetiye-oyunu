@@ -2,8 +2,8 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Davetiye Oyunu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Merve & Batuhan — Davetiye</title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -21,21 +21,23 @@
       --matched-border: #4a7a4a;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
 
     body {
       background: var(--bg);
       font-family: 'Jost', sans-serif;
       color: var(--text);
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       overflow-x: hidden;
     }
 
-    /* Noise overlay */
     body::before {
       content: '';
       position: fixed;
@@ -49,105 +51,122 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 900px;
-      padding: 40px 20px;
+      max-width: 680px;
+      padding: 32px 16px 48px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 36px;
+      gap: 24px;
     }
 
-    /* Header */
-    header {
-      text-align: center;
-    }
+    /* ── Header ── */
+    header { text-align: center; width: 100%; }
+
     .eyebrow {
-      font-family: 'Jost', sans-serif;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 500;
       letter-spacing: 4px;
       text-transform: uppercase;
       color: var(--gold);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
+
     header h1 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(28px, 5vw, 46px);
+      font-size: clamp(24px, 6vw, 42px);
       font-weight: 300;
       color: var(--cream);
       line-height: 1.2;
     }
+
     header h1 em {
       font-style: italic;
       color: var(--gold-light);
     }
+
     .subtitle {
-      margin-top: 10px;
-      font-size: 13px;
+      margin-top: 8px;
+      font-size: clamp(11px, 3vw, 13px);
       color: var(--muted);
       font-weight: 300;
-      letter-spacing: 0.5px;
     }
 
-    /* Ornament */
+    /* ── Ornament ── */
     .ornament {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
       color: var(--gold-dim);
-      font-size: 18px;
+      font-size: 16px;
+      width: 100%;
+      justify-content: center;
     }
     .ornament::before, .ornament::after {
       content: '';
-      width: 60px;
+      flex: 1;
+      max-width: 80px;
       height: 1px;
       background: linear-gradient(to right, transparent, var(--gold-dim));
     }
     .ornament::after { transform: scaleX(-1); }
 
-    /* Attempts counter */
+    /* ── Stats ── */
     .stats {
       display: flex;
-      gap: 32px;
+      gap: 0;
       text-align: center;
+      width: 100%;
+      max-width: 320px;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      overflow: hidden;
     }
+
     .stat-item {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
+      padding: 12px 8px;
     }
+
+    .stat-item + .stat-item {
+      border-left: 1px solid var(--card-border);
+    }
+
     .stat-value {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 32px;
+      font-size: clamp(22px, 5vw, 30px);
       font-weight: 300;
       color: var(--gold-light);
       line-height: 1;
     }
+
     .stat-label {
-      font-size: 10px;
-      letter-spacing: 3px;
+      font-size: 9px;
+      letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    /* Grid */
+    /* ── Card Grid ── */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      gap: 10px;
       width: 100%;
-      max-width: 700px;
     }
 
-    @media (max-width: 500px) {
-      .card-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media (max-width: 380px) {
+      .card-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
     }
 
-    /* Card */
+    /* ── Card ── */
     .card {
       aspect-ratio: 3/4;
-      perspective: 800px;
+      perspective: 600px;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .card-inner {
@@ -155,16 +174,16 @@
       height: 100%;
       position: relative;
       transform-style: preserve-3d;
-      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .card.flipped .card-inner { transform: rotateY(180deg); }
+    .card.flipped .card-inner,
     .card.matched .card-inner { transform: rotateY(180deg); }
 
     .card-face {
       position: absolute;
       inset: 0;
-      border-radius: 10px;
+      border-radius: 8px;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       overflow: hidden;
@@ -176,35 +195,32 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      gap: 8px;
       transition: border-color 0.3s;
     }
-    .card:hover:not(.matched) .card-back {
-      border-color: var(--gold-dim);
+
+    .card:active:not(.matched) .card-back { border-color: var(--gold-dim); }
+
+    @media (hover: hover) {
+      .card:hover:not(.matched) .card-back { border-color: var(--gold-dim); }
     }
+
     .card-back-pattern {
-      width: 60%;
-      height: 60%;
+      width: 55%;
+      height: 55%;
       border: 1px solid var(--card-border);
       border-radius: 4px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: clamp(14px, 3vw, 20px);
       color: var(--gold-dim);
-      transition: color 0.3s;
     }
-    .card:hover:not(.matched) .card-back-pattern { color: var(--gold); }
 
     .card-front {
       transform: rotateY(180deg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
+      border-radius: 8px;
       background: var(--surface);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
     }
 
@@ -215,38 +231,55 @@
       display: block;
     }
 
-    /* Matched glow */
     .card.matched .card-front {
       border-color: var(--matched-border);
-      box-shadow: 0 0 20px rgba(74, 122, 74, 0.3);
+      box-shadow: 0 0 16px rgba(74, 122, 74, 0.3);
     }
     .card.matched .card-back { background: var(--matched); }
 
-    /* Wrong shake */
     @keyframes shake {
-      0%, 100% { transform: rotateY(180deg) translateX(0); }
-      20% { transform: rotateY(180deg) translateX(-6px); }
-      40% { transform: rotateY(180deg) translateX(6px); }
-      60% { transform: rotateY(180deg) translateX(-4px); }
-      80% { transform: rotateY(180deg) translateX(4px); }
+      0%,100% { transform: rotateY(180deg) translateX(0); }
+      25%      { transform: rotateY(180deg) translateX(-5px); }
+      75%      { transform: rotateY(180deg) translateX(5px); }
     }
-    .card.wrong .card-inner { animation: shake 0.4s ease; }
+    .card.wrong .card-inner { animation: shake 0.35s ease; }
 
-    /* ===== POPUP ===== */
+    /* ── Win Banner ── */
+    .win-banner {
+      text-align: center;
+      padding: 8px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.5s ease 0.3s;
+      pointer-events: none;
+    }
+    .win-banner.show { opacity: 1; transform: translateY(0); }
+    .win-banner p {
+      font-size: 11px;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════
+       POPUP
+    ══════════════════════════════ */
     .popup-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(8px);
-      z-index: 100;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 200;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease;
-      padding: 20px;
+      transition: opacity 0.35s ease;
+      padding: 0;
     }
+
     .popup-overlay.active {
       opacity: 1;
       pointer-events: all;
@@ -255,220 +288,247 @@
     .popup {
       background: var(--surface);
       border: 1px solid var(--gold-dim);
-      border-radius: 16px;
-      max-width: 520px;
+      border-bottom: none;
+      border-radius: 20px 20px 0 0;
       width: 100%;
-      padding: 48px 40px;
+      max-width: 560px;
+      max-height: 92dvh;
+      max-height: 92vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 28px 20px 36px;
       text-align: center;
-      position: relative;
-      transform: translateY(30px) scale(0.95);
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.1);
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.34, 1.3, 0.64, 1);
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
     }
-    .popup-overlay.active .popup {
-      transform: translateY(0) scale(1);
+
+    /* Tablet ve üstünde ortalanmış modal */
+    @media (min-width: 600px) {
+      .popup-overlay { align-items: center; padding: 20px; }
+      .popup {
+        border: 1px solid var(--gold-dim);
+        border-radius: 16px;
+        max-width: 500px;
+        padding: 36px 32px 40px;
+        transform: translateY(24px) scale(0.96);
+      }
+      .popup-overlay.active .popup { transform: translateY(0) scale(1); }
     }
+
+    .popup-overlay.active .popup { transform: translateY(0); }
+
+    /* Drag handle (mobil) */
+    .popup-handle {
+      width: 36px;
+      height: 4px;
+      background: var(--card-border);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+    @media (min-width: 600px) { .popup-handle { display: none; } }
 
     .popup-badge {
       display: inline-block;
-      font-size: 10px;
-      letter-spacing: 4px;
+      font-size: 9px;
+      letter-spacing: 3px;
       text-transform: uppercase;
       color: var(--gold);
       border: 1px solid var(--gold-dim);
-      padding: 5px 14px;
+      padding: 4px 12px;
       border-radius: 999px;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
 
     .popup h2 {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(26px, 4vw, 38px);
+      font-size: clamp(22px, 6vw, 34px);
       font-weight: 300;
       color: var(--cream);
       line-height: 1.25;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .popup-divider {
-      width: 60px;
+      width: 50px;
       height: 1px;
       background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
-      margin: 20px auto;
+      margin: 14px auto;
     }
 
     .popup-invite-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 17px;
+      font-size: clamp(14px, 4vw, 16px);
       font-style: italic;
       color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 6px;
+      line-height: 1.65;
+      margin-bottom: 4px;
     }
 
     .popup-event-details {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin: 24px 0;
+      margin: 16px 0;
       background: rgba(201,168,76,0.05);
       border: 1px solid rgba(201,168,76,0.12);
       border-radius: 10px;
-      padding: 20px;
+      padding: 14px 16px;
     }
 
     .detail-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-size: 14px;
+      gap: 8px;
+      font-size: clamp(12px, 3.5vw, 14px);
       color: var(--text);
+      flex-wrap: wrap;
     }
-    .detail-row .icon { color: var(--gold); font-size: 16px; }
+
+    .detail-row .icon { font-size: 15px; flex-shrink: 0; }
     .detail-row strong { color: var(--cream); }
 
     .popup-question {
-      font-size: 14px;
+      font-size: clamp(12px, 3.5vw, 14px);
       color: var(--muted);
-      letter-spacing: 0.5px;
-      margin-bottom: 20px;
+      margin-bottom: 14px;
     }
 
+    /* ── İsim Formu ── */
+    .name-form { margin: 0 0 16px; }
+
+    .name-fields {
+      display: flex;
+      gap: 10px;
+    }
+
+    .field-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: left;
+      min-width: 0;
+    }
+
+    .field-wrap label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .field-wrap input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 7px;
+      padding: 11px 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 15px;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+      /* iOS zoom önleme — 16px altında zoom olur */
+      -webkit-appearance: none;
+    }
+
+    .field-wrap input::placeholder { color: var(--muted); font-size: 13px; }
+    .field-wrap input:focus { border-color: var(--gold-dim); }
+    .field-wrap input.error { border-color: #c0392b; }
+
+    .name-error {
+      font-size: 11px;
+      color: #e74c3c;
+      margin-top: 7px;
+      display: none;
+      text-align: left;
+    }
+    .name-error.show { display: block; }
+
+    /* ── Butonlar ── */
     .popup-actions {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .btn {
-      padding: 13px 28px;
+      padding: 12px 18px;
       border-radius: 8px;
       font-family: 'Jost', sans-serif;
-      font-size: 13px;
+      font-size: clamp(11px, 3vw, 13px);
       font-weight: 500;
-      letter-spacing: 1.5px;
+      letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
       border: none;
       transition: all 0.2s ease;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    .btn-yes {
-      background: var(--gold);
-      color: var(--bg);
-    }
-    .btn-yes:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+    .btn-yes  { background: var(--gold); color: var(--bg); }
+    .btn-yes:active  { background: var(--gold-light); }
 
-    .btn-no {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--card-border);
-    }
-    .btn-no:hover { border-color: var(--muted); color: var(--text); transform: translateY(-2px); }
+    .btn-no   { background: transparent; color: var(--muted); border: 1px solid var(--card-border); }
+    .btn-no:active   { border-color: var(--muted); color: var(--text); }
 
-    .btn-maybe {
-      background: transparent;
-      color: var(--gold-dim);
-      border: 1px solid rgba(201,168,76,0.2);
-    }
-    .btn-maybe:hover { border-color: var(--gold-dim); color: var(--gold); transform: translateY(-2px); }
+    .btn-maybe { background: transparent; color: var(--gold-dim); border: 1px solid rgba(201,168,76,0.2); }
+    .btn-maybe:active { border-color: var(--gold-dim); color: var(--gold); }
 
-    /* Confirmation message */
+    @media (hover: hover) {
+      .btn-yes:hover   { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,0.3); }
+      .btn-no:hover    { border-color: var(--muted); color: var(--text); transform: translateY(-2px); }
+      .btn-maybe:hover { border-color: var(--gold-dim); color: var(--gold); transform: translateY(-2px); }
+    }
+
+    /* ── Onay ekranı ── */
     .popup-confirm {
       display: none;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 12px;
     }
     .popup-confirm.show { display: flex; }
-    .popup-main.hidden { display: none; }
+    .popup-main.hidden  { display: none; }
 
-    .confirm-icon { font-size: 40px; }
+    .confirm-icon  { font-size: 42px; }
     .confirm-title {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 28px;
+      font-size: clamp(22px, 6vw, 28px);
       font-weight: 300;
       color: var(--cream);
     }
     .confirm-sub { font-size: 13px; color: var(--muted); }
+
     .btn-close {
-      margin-top: 8px;
+      margin-top: 6px;
       padding: 10px 24px;
       border-radius: 8px;
       background: transparent;
       border: 1px solid var(--card-border);
       color: var(--muted);
       font-family: 'Jost', sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       letter-spacing: 2px;
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.2s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .btn-close:hover { border-color: var(--gold-dim); color: var(--text); }
-
-    /* İsim formu */
-    .name-form {
-      margin: 0 0 20px;
+    .btn-close:active { border-color: var(--gold-dim); color: var(--text); }
+    @media (hover: hover) {
+      .btn-close:hover { border-color: var(--gold-dim); color: var(--text); }
     }
-    .name-fields {
-      display: flex;
-      gap: 12px;
-    }
-    .field-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      text-align: left;
-    }
-    .field-wrap label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .field-wrap input {
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--card-border);
-      border-radius: 7px;
-      padding: 11px 14px;
-      font-family: 'Jost', sans-serif;
-      font-size: 14px;
-      color: var(--cream);
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
-    }
-    .field-wrap input::placeholder { color: var(--muted); }
-    .field-wrap input:focus { border-color: var(--gold-dim); }
-    .field-wrap input.error { border-color: #c0392b; }
-    .name-error {
-      font-size: 12px;
-      color: #e74c3c;
-      margin-top: 8px;
-      display: none;
-      text-align: left;
-    }
-    .name-error.show { display: block; }
-
-    /* Win message */
-    .win-banner {
-      text-align: center;
-      padding: 20px;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.5s ease 0.3s;
-    }
-    .win-banner.show { opacity: 1; transform: translateY(0); }
-    .win-banner p { font-size: 13px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
   </style>
 </head>
 <body>
 
 <div class="page-wrapper">
+
   <header>
     <p class="eyebrow">Seni Aramıza Bekliyoruz</p>
     <h1>Kartları Eşleştir,<br><em>Daveti Keşfet</em></h1>
@@ -482,13 +542,13 @@
       <div class="stat-value" id="attempts">0</div>
       <div class="stat-label">Deneme</div>
     </div>
-    <div class="stat-item" style="border-left:1px solid #2a2418; border-right:1px solid #2a2418; padding:0 32px;">
+    <div class="stat-item">
       <div class="stat-value" id="matched-count">0</div>
       <div class="stat-label">Eşleşen</div>
     </div>
     <div class="stat-item">
       <div class="stat-value" id="remaining">4</div>
-      <div class="stat-label">Kalan Çift</div>
+      <div class="stat-label">Kalan</div>
     </div>
   </div>
 
@@ -497,46 +557,49 @@
   <div class="win-banner" id="win-banner">
     <p>✦ Tüm kartlar eşleşti ✦</p>
   </div>
+
 </div>
 
-<!-- POPUP -->
+<!-- ══════════════ POPUP ══════════════ -->
 <div class="popup-overlay" id="popup-overlay">
   <div class="popup">
-    <!-- Ana davetiye içeriği -->
+    <div class="popup-handle"></div>
+
+    <!-- Ana davetiye -->
     <div class="popup-main" id="popup-main">
       <span class="popup-badge">✦ Özel Davetiye ✦</span>
-      <h2>Büyük Günümüze<br>Davetlisiniz</h2>
+
+      <h2>Merve & Batuhan'ın<br><em>Düğününe Davetlisiniz</em></h2>
+
       <div class="popup-divider"></div>
+
       <p class="popup-invite-text">
-        Sevdiklerimizle paylaşmak istediğimiz<br>bu özel günde sizi aramızda görmekten<br>mutluluk duyarız.
+        Sevdiklerimizle paylaşmak istediğimiz<br>
+        bu özel günde sizi aramızda<br>
+        görmekten mutluluk duyarız.
       </p>
 
-      <!-- ======================================= -->
-      <!-- DAVET BİLGİLERİNİ BURADAN DEĞİŞTİRİN  -->
-      <!-- ======================================= -->
       <div class="popup-event-details">
         <div class="detail-row">
-          <span class="icon">👰</span>
-          <span><strong>Ayşe</strong> &amp; <strong>Mehmet</strong>'in Düğünü</span>
+          <span class="icon">💍</span>
+          <span><strong>Merve</strong> &amp; <strong>Batuhan</strong></span>
         </div>
         <div class="detail-row">
           <span class="icon">📅</span>
-          <span><strong>15 Haziran 2025</strong> · Cumartesi</span>
+          <span><strong>6 Haziran 2026</strong> · Cumartesi</span>
         </div>
         <div class="detail-row">
           <span class="icon">🕕</span>
-          <span>Saat <strong>18:00</strong>'de</span>
+          <span>Saat <strong>18:00 – 22:00</strong></span>
         </div>
         <div class="detail-row">
           <span class="icon">📍</span>
-          <span><strong>Grand Ballroom, İstanbul</strong></span>
+          <span><strong>Eva Garden</strong> · Bahçeköy</span>
         </div>
       </div>
-      <!-- ===================================== -->
 
       <p class="popup-question">Bu özel günümüzde bize eşlik edecek misiniz?</p>
 
-      <!-- İsim formu -->
       <div class="name-form">
         <div class="name-fields">
           <div class="field-wrap">
@@ -552,47 +615,31 @@
       </div>
 
       <div class="popup-actions">
-        <button class="btn btn-yes" onclick="respond('Evet, geleceğim! 🎉')">Evet, Geleceğim</button>
+        <button class="btn btn-yes"   onclick="respond('Evet, geleceğim! 🎉')">Evet, Geleceğim</button>
         <button class="btn btn-maybe" onclick="respond('Belki gelebilirim 🤔')">Belki</button>
-        <button class="btn btn-no" onclick="respond('Maalesef gelemeyeceğim 😢')">Katılamıyorum</button>
+        <button class="btn btn-no"    onclick="respond('Maalesef gelemeyeceğim 😢')">Katılamıyorum</button>
       </div>
     </div>
 
     <!-- Onay mesajı -->
     <div class="popup-confirm" id="popup-confirm">
-      <div class="confirm-icon" id="confirm-icon">🎊</div>
+      <div class="confirm-icon"  id="confirm-icon">🎊</div>
       <div class="confirm-title" id="confirm-title">Teşekkürler!</div>
-      <div class="confirm-sub" id="confirm-sub">Cevabınız alındı.</div>
+      <div class="confirm-sub"   id="confirm-sub">Cevabınız alındı.</div>
       <button class="btn-close" onclick="closePopup()">Kapat</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ================================================
-  // GÖRSEL AYARLARI — Kendi görsellerinizi girin
-  // ================================================
-  // "special" id'li çift = eşleşince davetiye açılır
-  // Diğerleri normal eşleşme kartları
-  //
-  // src alanına: yerel dosya adı ('resim.jpg') veya
-  // tam URL ('https://...') yazabilirsiniz.
-  // ================================================
-
-  // ================================================
+  // ══════════════════════════════════════════
   // GÖRSEL AYARLARI
-  // ================================================
-  // Görseller GitHub repo'nuzdan çekilir.
-  // index.html ile AYNI klasöre 1.jpg ... 8.jpg
-  // adlı 8 dosyayı yükleyin, başka bir şey gerekmez.
-  //
   // Her çiftte iki FARKLI görsel kullanılır:
   //   special çifti → 1.jpg + 2.jpg  ← davetiyeyi açar
   //   b çifti       → 3.jpg + 4.jpg
   //   c çifti       → 5.jpg + 6.jpg
   //   d çifti       → 7.jpg + 8.jpg
-  // ================================================
-
+  // ══════════════════════════════════════════
   const CARD_PAIRS = [
     { id: 'special', label: '💍', src1: '1.jpg', src2: '2.jpg' },
     { id: 'b',       label: '🌸', src1: '3.jpg', src2: '4.jpg' },
@@ -600,25 +647,22 @@
     { id: 'd',       label: '🥂', src1: '7.jpg', src2: '8.jpg' },
   ];
 
-  // ================================================
+  // ══════════════════════════════════════════
+  // APPS SCRIPT URL
+  // ══════════════════════════════════════════
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzm9PkCG2e1SMwRbWnfUHr2KvVShOdU3AB6xol0pEU-tm41NWvwEmT2Le6mSvpRDi_d/exec';
+
+  // ══════════════════════════════════════════
   // OYUN MOTORU
-  // ================================================
+  // ══════════════════════════════════════════
+  let cards = [], flipped = [], matchedCount = 0, attempts = 0, locked = false;
 
-  let cards = [];
-  let flipped = [];
-  let matchedCount = 0;
-  let attempts = 0;
-  let locked = false;
-
-  // Kartları çoğalt ve karıştır
-  // Her çiftten 2 kart üretilir; her kartın src'si farklı
   function buildDeck() {
     const deck = [];
-    CARD_PAIRS.forEach(pair => {
-      deck.push({ id: pair.id, label: pair.label, src: pair.src1, uid: pair.id + '_1' });
-      deck.push({ id: pair.id, label: pair.label, src: pair.src2, uid: pair.id + '_2' });
+    CARD_PAIRS.forEach(p => {
+      deck.push({ id: p.id, label: p.label, src: p.src1, uid: p.id + '_1' });
+      deck.push({ id: p.id, label: p.label, src: p.src2, uid: p.id + '_2' });
     });
-    // Fisher-Yates karıştırma
     for (let i = deck.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [deck[i], deck[j]] = [deck[j], deck[i]];
@@ -629,19 +673,16 @@
   function renderGrid() {
     const grid = document.getElementById('card-grid');
     grid.innerHTML = '';
-    cards.forEach((card, idx) => {
+    cards.forEach(card => {
       const el = document.createElement('div');
       el.className = 'card';
-      el.dataset.uid = card.uid;
-      el.dataset.id = card.id;
-      el.dataset.idx = idx;
       el.innerHTML = `
         <div class="card-inner">
           <div class="card-face card-back">
             <div class="card-back-pattern">${card.label}</div>
           </div>
           <div class="card-face card-front">
-            <img src="${card.src}" alt="kart" loading="lazy" />
+            <img src="${card.src}" alt="" loading="lazy" />
           </div>
         </div>`;
       el.addEventListener('click', () => flipCard(el, card));
@@ -651,67 +692,49 @@
   }
 
   function flipCard(el, card) {
-    if (locked) return;
-    if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
-    if (flipped.length >= 2) return;
-
+    if (locked || el.classList.contains('flipped') || el.classList.contains('matched') || flipped.length >= 2) return;
     el.classList.add('flipped');
     flipped.push({ el, card });
-
-    if (flipped.length === 2) {
-      locked = true;
-      attempts++;
-      updateStats();
-      checkMatch();
-    }
+    if (flipped.length === 2) { locked = true; attempts++; updateStats(); checkMatch(); }
   }
 
   function checkMatch() {
     const [a, b] = flipped;
     if (a.card.id === b.card.id) {
-      // Eşleşti
       setTimeout(() => {
-        a.el.classList.remove('flipped');
-        b.el.classList.remove('flipped');
-        a.el.classList.add('matched');
-        b.el.classList.add('matched');
-        matchedCount++;
-        updateStats();
-        flipped = [];
-        locked = false;
-        if (a.card.id === 'special') {
-          setTimeout(openPopup, 500);
-        }
-        if (matchedCount === CARD_PAIRS.length) {
-          document.getElementById('win-banner').classList.add('show');
-        }
+        a.el.classList.replace('flipped', 'matched');
+        b.el.classList.replace('flipped', 'matched');
+        matchedCount++; updateStats();
+        flipped = []; locked = false;
+        if (a.card.id === 'special') setTimeout(openPopup, 500);
+        if (matchedCount === CARD_PAIRS.length) document.getElementById('win-banner').classList.add('show');
       }, 400);
     } else {
-      // Eşleşmedi
       a.el.classList.add('wrong');
       b.el.classList.add('wrong');
       setTimeout(() => {
         a.el.classList.remove('flipped', 'wrong');
         b.el.classList.remove('flipped', 'wrong');
-        flipped = [];
-        locked = false;
+        flipped = []; locked = false;
       }, 900);
     }
   }
 
   function updateStats() {
-    document.getElementById('attempts').textContent = attempts;
+    document.getElementById('attempts').textContent     = attempts;
     document.getElementById('matched-count').textContent = matchedCount;
-    document.getElementById('remaining').textContent = CARD_PAIRS.length - matchedCount;
+    document.getElementById('remaining').textContent    = CARD_PAIRS.length - matchedCount;
   }
 
-  // ================================================
+  // ══════════════════════════════════════════
   // POPUP
-  // ================================================
-
+  // ══════════════════════════════════════════
   function openPopup() {
     document.getElementById('popup-main').classList.remove('hidden');
     document.getElementById('popup-confirm').classList.remove('show');
+    document.getElementById('input-name').value = '';
+    document.getElementById('input-surname').value = '';
+    document.getElementById('name-error').classList.remove('show');
     document.getElementById('popup-overlay').classList.add('active');
   }
 
@@ -720,67 +743,49 @@
   }
 
   function respond(answer) {
-    const nameEl = document.getElementById('input-name');
+    const nameEl    = document.getElementById('input-name');
     const surnameEl = document.getElementById('input-surname');
-    const errorEl = document.getElementById('name-error');
-    const name = nameEl.value.trim();
-    const surname = surnameEl.value.trim();
+    const errorEl   = document.getElementById('name-error');
+    const name      = nameEl.value.trim();
+    const surname   = surnameEl.value.trim();
 
-    // Validasyon
     if (!name || !surname) {
       errorEl.classList.add('show');
-      if (!name) nameEl.classList.add('error');
+      if (!name)    nameEl.classList.add('error');
       if (!surname) surnameEl.classList.add('error');
-      nameEl.addEventListener('input', () => { nameEl.classList.remove('error'); errorEl.classList.remove('show'); }, { once: true });
-      surnameEl.addEventListener('input', () => { surnameEl.classList.remove('error'); errorEl.classList.remove('show'); }, { once: true });
+      [nameEl, surnameEl].forEach(el =>
+        el.addEventListener('input', () => { el.classList.remove('error'); errorEl.classList.remove('show'); }, { once: true })
+      );
       return;
     }
 
-    const icon = answer.includes('Evet') ? '🎊' : answer.includes('Belki') ? '🤔' : '💐';
-    const title = answer.includes('Evet') ? 'Harika! Görüşürüz!' : answer.includes('Belki') ? 'Anlıyoruz, bekleriz!' : 'Üzüldük, iyi günler!';
+    const icon  = answer.includes('Evet') ? '🎊' : answer.includes('Belki') ? '🤔' : '💐';
+    const title = answer.includes('Evet') ? 'Görüşürüz!' : answer.includes('Belki') ? 'Bekleriz sizi!' : 'Üzüldük, iyi günler!';
 
-    document.getElementById('confirm-icon').textContent = icon;
+    document.getElementById('confirm-icon').textContent  = icon;
     document.getElementById('confirm-title').textContent = title;
-    document.getElementById('confirm-sub').textContent = `${name} ${surname} — cevabınız kaydedildi.`;
-
+    document.getElementById('confirm-sub').textContent   = `${name} ${surname} — cevabınız kaydedildi.`;
     document.getElementById('popup-main').classList.add('hidden');
     document.getElementById('popup-confirm').classList.add('show');
 
     saveResponse(answer, name, surname);
   }
 
-  // =====================================================
-  // BURAYA APPS SCRIPT URL'İNİ YAPIŞTIR
-  // Deploy ettikten sonra aldığın URL'yi buraya gir
-  // =====================================================
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzm9PkCG2e1SMwRbWnfUHr2KvVShOdU3AB6xol0pEU-tm41NWvwEmT2Le6mSvpRDi_d/exec';
-
   async function saveResponse(answer, name, surname) {
-    const payload = {
-      name,
-      surname,
-      answer,
-      time: new Date().toLocaleString('tr-TR')
-    };
     try {
       await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ time: new Date().toLocaleString('tr-TR'), name, surname, answer })
       });
-      console.log('✓ Google Sheets\'e kaydedildi:', name, surname, answer);
-    } catch (e) {
-      console.error('Kayıt hatası:', e);
-    }
+    } catch(e) { console.error('Kayıt hatası:', e); }
   }
 
-  // Overlay dışına tıklayınca kapat
-  document.getElementById('popup-overlay').addEventListener('click', function(e) {
-    if (e.target === this) closePopup();
+  document.getElementById('popup-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closePopup();
   });
 
-  // Başlat
   cards = buildDeck();
   renderGrid();
 </script>
