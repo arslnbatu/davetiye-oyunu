@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Davetiye Oyunu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0d0a07;
+      --surface: #16120d;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: #7a6330;
+      --cream: #f5ede0;
+      --text: #e8ddd0;
+      --muted: #8a7d6e;
+      --card-back: #1e1810;
+      --card-border: #3a2e1e;
+      --matched: #1a2e1a;
+      --matched-border: #4a7a4a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      font-family: 'Jost', sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+    }
+
+    /* Noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 900px;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 36px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+    }
+    .eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 5vw, 46px);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+    header h1 em {
+      font-style: italic;
+      color: var(--gold-light);
+    }
+    .subtitle {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      letter-spacing: 0.5px;
+    }
+
+    /* Ornament */
+    .ornament {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--gold-dim);
+      font-size: 18px;
+    }
+    .ornament::before, .ornament::after {
+      content: '';
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim));
+    }
+    .ornament::after { transform: scaleX(-1); }
+
+    /* Attempts counter */
+    .stats {
+      display: flex;
+      gap: 32px;
+      text-align: center;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--gold-light);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Grid */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      width: 100%;
+      max-width: 700px;
+    }
+
+    @media (max-width: 500px) {
+      .card-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    }
+
+    /* Card */
+    .card {
+      aspect-ratio: 3/4;
+      perspective: 800px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card.flipped .card-inner { transform: rotateY(180deg); }
+    .card.matched .card-inner { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: 10px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      overflow: hidden;
+    }
+
+    .card-back {
+      background: var(--card-back);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.3s;
+    }
+    .card:hover:not(.matched) .card-back {
+      border-color: var(--gold-dim);
+    }
+    .card-back-pattern {
+      width: 60%;
+      height: 60%;
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--gold-dim);
+      transition: color 0.3s;
+    }
+    .card:hover:not(.matched) .card-back-pattern { color: var(--gold); }
+
+    .card-front {
+      transform: rotateY(180deg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      background: var(--surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Matched glow */
+    .card.matched .card-front {
+      border-color: var(--matched-border);
+      box-shadow: 0 0 20px rgba(74, 122, 74, 0.3);
+    }
+    .card.matched .card-back { background: var(--matched); }
+
+    /* Wrong shake */
+    @keyframes shake {
+      0%, 100% { transform: rotateY(180deg) translateX(0); }
+      20% { transform: rotateY(180deg) translateX(-6px); }
+      40% { transform: rotateY(180deg) translateX(6px); }
+      60% { transform: rotateY(180deg) translateX(-4px); }
+      80% { transform: rotateY(180deg) translateX(4px); }
+    }
+    .card.wrong .card-inner { animation: shake 0.4s ease; }
+
+    /* ===== POPUP ===== */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      padding: 20px;
+    }
+    .popup-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .popup {
+      background: var(--surface);
+      border: 1px solid var(--gold-dim);
+      border-radius: 16px;
+      max-width: 520px;
+      width: 100%;
+      padding: 48px 40px;
+      text-align: center;
+      position: relative;
+      transform: translateY(30px) scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(201,168,76,0.1);
+    }
+    .popup-overlay.active .popup {
+      transform: translateY(0) scale(1);
+    }
+
+    .popup-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 24px;
+    }
+
+    .popup h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .popup-divider {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold-dim), transparent);
+      margin: 20px auto;
+    }
+
+    .popup-invite-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+
+    .popup-event-details {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 24px 0;
+      background: rgba(201,168,76,0.05);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .detail-row .icon { color: var(--gold); font-size: 16px; }
+    .detail-row strong { color: var(--cream); }
+
+    .popup-question {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+    }
+
+    .popup-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 13px 28px;
+      border-radius: 8px;
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-yes {
+      background: var(--gold);
+      color: var(--bg);
+    }
+    .btn-yes:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+
+    .btn-no {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--card-border);
+    }
+    .btn-no:hover { border-color: var(--muted); color: var(--text); transform: translateY(-2px); }
+
+    .btn-maybe {
+      background: transparent;
+      color: var(--gold-dim);
+      border: 1px solid rgba(201,168,76,0.2);
+    }
+    .btn-maybe:hover { border-color: var(--gold-dim); color: var(--gold); transform: translateY(-2px); }
+
+    /* Confirmation message */
+    .popup-confirm {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .popup-confirm.show { display: flex; }
+    .popup-main.hidden { display: none; }
+
+    .confirm-icon { font-size: 40px; }
+    .confirm-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      font-weight: 300;
+      color: var(--cream);
+    }
+    .confirm-sub { font-size: 13px; color: var(--muted); }
+    .btn-close {
+      margin-top: 8px;
+      padding: 10px 24px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--muted);
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-close:hover { border-color: var(--gold-dim); color: var(--text); }
+
+    /* İsim formu */
+    .name-form {
+      margin: 0 0 20px;
+    }
+    .name-fields {
+      display: flex;
+      gap: 12px;
+    }
+    .field-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+    .field-wrap label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .field-wrap input {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--card-border);
+      border-radius: 7px;
+      padding: 11px 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      color: var(--cream);
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .field-wrap input::placeholder { color: var(--muted); }
+    .field-wrap input:focus { border-color: var(--gold-dim); }
+    .field-wrap input.error { border-color: #c0392b; }
+    .name-error {
+      font-size: 12px;
+      color: #e74c3c;
+      margin-top: 8px;
+      display: none;
+      text-align: left;
+    }
+    .name-error.show { display: block; }
+
+    /* Win message */
+    .win-banner {
+      text-align: center;
+      padding: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.5s ease 0.3s;
+    }
+    .win-banner.show { opacity: 1; transform: translateY(0); }
+    .win-banner p { font-size: 13px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <header>
+    <p class="eyebrow">Seni Aramıza Bekliyoruz</p>
+    <h1>Kartları Eşleştir,<br><em>Daveti Keşfet</em></h1>
+    <p class="subtitle">Özel çifti bul ve sürprizi açığa çıkar</p>
+  </header>
+
+  <div class="ornament">✦</div>
+
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-value" id="attempts">0</div>
+      <div class="stat-label">Deneme</div>
+    </div>
+    <div class="stat-item" style="border-left:1px solid #2a2418; border-right:1px solid #2a2418; padding:0 32px;">
+      <div class="stat-value" id="matched-count">0</div>
+      <div class="stat-label">Eşleşen</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="remaining">4</div>
+      <div class="stat-label">Kalan Çift</div>
+    </div>
+  </div>
+
+  <div class="card-grid" id="card-grid"></div>
+
+  <div class="win-banner" id="win-banner">
+    <p>✦ Tüm kartlar eşleşti ✦</p>
+  </div>
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup">
+    <!-- Ana davetiye içeriği -->
+    <div class="popup-main" id="popup-main">
+      <span class="popup-badge">✦ Özel Davetiye ✦</span>
+      <h2>Büyük Günümüze<br>Davetlisiniz</h2>
+      <div class="popup-divider"></div>
+      <p class="popup-invite-text">
+        Sevdiklerimizle paylaşmak istediğimiz<br>bu özel günde sizi aramızda görmekten<br>mutluluk duyarız.
+      </p>
+
+      <!-- ======================================= -->
+      <!-- DAVET BİLGİLERİNİ BURADAN DEĞİŞTİRİN  -->
+      <!-- ======================================= -->
+      <div class="popup-event-details">
+        <div class="detail-row">
+          <span class="icon">👰</span>
+          <span><strong>Ayşe</strong> &amp; <strong>Mehmet</strong>'in Düğünü</span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">📅</span>
+          <span><strong>15 Haziran 2025</strong> · Cumartesi</span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">🕕</span>
+          <span>Saat <strong>18:00</strong>'de</span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">📍</span>
+          <span><strong>Grand Ballroom, İstanbul</strong></span>
+        </div>
+      </div>
+      <!-- ===================================== -->
+
+      <p class="popup-question">Bu özel günümüzde bize eşlik edecek misiniz?</p>
+
+      <!-- İsim formu -->
+      <div class="name-form">
+        <div class="name-fields">
+          <div class="field-wrap">
+            <label for="input-name">Ad</label>
+            <input type="text" id="input-name" placeholder="Adınız" autocomplete="given-name" />
+          </div>
+          <div class="field-wrap">
+            <label for="input-surname">Soyad</label>
+            <input type="text" id="input-surname" placeholder="Soyadınız" autocomplete="family-name" />
+          </div>
+        </div>
+        <p class="name-error" id="name-error">Lütfen adınızı ve soyadınızı girin.</p>
+      </div>
+
+      <div class="popup-actions">
+        <button class="btn btn-yes" onclick="respond('Evet, geleceğim! 🎉')">Evet, Geleceğim</button>
+        <button class="btn btn-maybe" onclick="respond('Belki gelebilirim 🤔')">Belki</button>
+        <button class="btn btn-no" onclick="respond('Maalesef gelemeyeceğim 😢')">Katılamıyorum</button>
+      </div>
+    </div>
+
+    <!-- Onay mesajı -->
+    <div class="popup-confirm" id="popup-confirm">
+      <div class="confirm-icon" id="confirm-icon">🎊</div>
+      <div class="confirm-title" id="confirm-title">Teşekkürler!</div>
+      <div class="confirm-sub" id="confirm-sub">Cevabınız alındı.</div>
+      <button class="btn-close" onclick="closePopup()">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ================================================
+  // GÖRSEL AYARLARI — Kendi görsellerinizi girin
+  // ================================================
+  // "special" id'li çift = eşleşince davetiye açılır
+  // Diğerleri normal eşleşme kartları
+  //
+  // src alanına: yerel dosya adı ('resim.jpg') veya
+  // tam URL ('https://...') yazabilirsiniz.
+  // ================================================
+
+  const CARD_PAIRS = [
+    {
+      id: 'special',
+      label: '💍',
+      // ÖZEL ÇİFT — Bu ikisi eşleşince davetiye açılır
+      src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=80'
+    },
+    {
+      id: 'b',
+      label: '🌸',
+      src: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=300&q=80'
+    },
+    {
+      id: 'c',
+      label: '🕯️',
+      src: 'https://images.unsplash.com/photo-1510172951991-856a654063f9?w=300&q=80'
+    },
+    {
+      id: 'd',
+      label: '🥂',
+      src: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?w=300&q=80'
+    },
+  ];
+
+  // ================================================
+  // OYUN MOTORU
+  // ================================================
+
+  let cards = [];
+  let flipped = [];
+  let matchedCount = 0;
+  let attempts = 0;
+  let locked = false;
+
+  // Kartları çoğalt ve karıştır
+  function buildDeck() {
+    const deck = [];
+    CARD_PAIRS.forEach(pair => {
+      deck.push({ ...pair, uid: pair.id + '_1' });
+      deck.push({ ...pair, uid: pair.id + '_2' });
+    });
+    // Fisher-Yates karıştırma
+    for (let i = deck.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    return deck;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('card-grid');
+    grid.innerHTML = '';
+    cards.forEach((card, idx) => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.dataset.uid = card.uid;
+      el.dataset.id = card.id;
+      el.dataset.idx = idx;
+      el.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-back">
+            <div class="card-back-pattern">${card.label}</div>
+          </div>
+          <div class="card-face card-front">
+            <img src="${card.src}" alt="kart" loading="lazy" />
+          </div>
+        </div>`;
+      el.addEventListener('click', () => flipCard(el, card));
+      grid.appendChild(el);
+    });
+    updateStats();
+  }
+
+  function flipCard(el, card) {
+    if (locked) return;
+    if (el.classList.contains('flipped') || el.classList.contains('matched')) return;
+    if (flipped.length >= 2) return;
+
+    el.classList.add('flipped');
+    flipped.push({ el, card });
+
+    if (flipped.length === 2) {
+      locked = true;
+      attempts++;
+      updateStats();
+      checkMatch();
+    }
+  }
+
+  function checkMatch() {
+    const [a, b] = flipped;
+    if (a.card.id === b.card.id) {
+      // Eşleşti
+      setTimeout(() => {
+        a.el.classList.remove('flipped');
+        b.el.classList.remove('flipped');
+        a.el.classList.add('matched');
+        b.el.classList.add('matched');
+        matchedCount++;
+        updateStats();
+        flipped = [];
+        locked = false;
+        if (a.card.id === 'special') {
+          setTimeout(openPopup, 500);
+        }
+        if (matchedCount === CARD_PAIRS.length) {
+          document.getElementById('win-banner').classList.add('show');
+        }
+      }, 400);
+    } else {
+      // Eşleşmedi
+      a.el.classList.add('wrong');
+      b.el.classList.add('wrong');
+      setTimeout(() => {
+        a.el.classList.remove('flipped', 'wrong');
+        b.el.classList.remove('flipped', 'wrong');
+        flipped = [];
+        locked = false;
+      }, 900);
+    }
+  }
+
+  function updateStats() {
+    document.getElementById('attempts').textContent = attempts;
+    document.getElementById('matched-count').textContent = matchedCount;
+    document.getElementById('remaining').textContent = CARD_PAIRS.length - matchedCount;
+  }
+
+  // ================================================
+  // POPUP
+  // ================================================
+
+  function openPopup() {
+    document.getElementById('popup-main').classList.remove('hidden');
+    document.getElementById('popup-confirm').classList.remove('show');
+    document.getElementById('popup-overlay').classList.add('active');
+  }
+
+  function closePopup() {
+    document.getElementById('popup-overlay').classList.remove('active');
+  }
+
+  function respond(answer) {
+    const nameEl = document.getElementById('input-name');
+    const surnameEl = document.getElementById('input-surname');
+    const errorEl = document.getElementById('name-error');
+    const name = nameEl.value.trim();
+    const surname = surnameEl.value.trim();
+
+    // Validasyon
+    if (!name || !surname) {
+      errorEl.classList.add('show');
+      if (!name) nameEl.classList.add('error');
+      if (!surname) surnameEl.classList.add('error');
+      nameEl.addEventListener('input', () => { nameEl.classList.remove('error'); errorEl.classList.remove('show'); }, { once: true });
+      surnameEl.addEventListener('input', () => { surnameEl.classList.remove('error'); errorEl.classList.remove('show'); }, { once: true });
+      return;
+    }
+
+    const icon = answer.includes('Evet') ? '🎊' : answer.includes('Belki') ? '🤔' : '💐';
+    const title = answer.includes('Evet') ? 'Harika! Görüşürüz!' : answer.includes('Belki') ? 'Anlıyoruz, bekleriz!' : 'Üzüldük, iyi günler!';
+
+    document.getElementById('confirm-icon').textContent = icon;
+    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-sub').textContent = `${name} ${surname} — cevabınız kaydedildi.`;
+
+    document.getElementById('popup-main').classList.add('hidden');
+    document.getElementById('popup-confirm').classList.add('show');
+
+    saveResponse(answer, name, surname);
+  }
+
+  // =====================================================
+  // BURAYA APPS SCRIPT URL'İNİ YAPIŞTIR
+  // Deploy ettikten sonra aldığın URL'yi buraya gir
+  // =====================================================
+  const APPS_SCRIPT_URL = 'BURAYA_APPS_SCRIPT_URL_YAPISTIR';
+
+  async function saveResponse(answer, name, surname) {
+    const payload = {
+      name,
+      surname,
+      answer,
+      time: new Date().toLocaleString('tr-TR')
+    };
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      console.log('✓ Google Sheets\'e kaydedildi:', name, surname, answer);
+    } catch (e) {
+      console.error('Kayıt hatası:', e);
+    }
+  }
+
+  // Overlay dışına tıklayınca kapat
+  document.getElementById('popup-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closePopup();
+  });
+
+  // Başlat
+  cards = buildDeck();
+  renderGrid();
+</script>
+</body>
+</html>
