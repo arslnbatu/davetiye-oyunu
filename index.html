@@ -579,28 +579,25 @@
   // tam URL ('https://...') yazabilirsiniz.
   // ================================================
 
+  // ================================================
+  // GÖRSEL AYARLARI
+  // ================================================
+  // Görseller GitHub repo'nuzdan çekilir.
+  // index.html ile AYNI klasöre 1.jpg ... 8.jpg
+  // adlı 8 dosyayı yükleyin, başka bir şey gerekmez.
+  //
+  // Her çiftte iki FARKLI görsel kullanılır:
+  //   special çifti → 1.jpg + 2.jpg  ← davetiyeyi açar
+  //   b çifti       → 3.jpg + 4.jpg
+  //   c çifti       → 5.jpg + 6.jpg
+  //   d çifti       → 7.jpg + 8.jpg
+  // ================================================
+
   const CARD_PAIRS = [
-    {
-      id: 'special',
-      label: '💍',
-      // ÖZEL ÇİFT — Bu ikisi eşleşince davetiye açılır
-      src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=300&q=80'
-    },
-    {
-      id: 'b',
-      label: '🌸',
-      src: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=300&q=80'
-    },
-    {
-      id: 'c',
-      label: '🕯️',
-      src: 'https://images.unsplash.com/photo-1510172951991-856a654063f9?w=300&q=80'
-    },
-    {
-      id: 'd',
-      label: '🥂',
-      src: 'https://images.unsplash.com/photo-1504270997636-07ddfbd48945?w=300&q=80'
-    },
+    { id: 'special', label: '💍', src1: '1.jpg', src2: '2.jpg' },
+    { id: 'b',       label: '🌸', src1: '3.jpg', src2: '4.jpg' },
+    { id: 'c',       label: '🕯️', src1: '5.jpg', src2: '6.jpg' },
+    { id: 'd',       label: '🥂', src1: '7.jpg', src2: '8.jpg' },
   ];
 
   // ================================================
@@ -614,11 +611,12 @@
   let locked = false;
 
   // Kartları çoğalt ve karıştır
+  // Her çiftten 2 kart üretilir; her kartın src'si farklı
   function buildDeck() {
     const deck = [];
     CARD_PAIRS.forEach(pair => {
-      deck.push({ ...pair, uid: pair.id + '_1' });
-      deck.push({ ...pair, uid: pair.id + '_2' });
+      deck.push({ id: pair.id, label: pair.label, src: pair.src1, uid: pair.id + '_1' });
+      deck.push({ id: pair.id, label: pair.label, src: pair.src2, uid: pair.id + '_2' });
     });
     // Fisher-Yates karıştırma
     for (let i = deck.length - 1; i > 0; i--) {
@@ -755,7 +753,7 @@
   // BURAYA APPS SCRIPT URL'İNİ YAPIŞTIR
   // Deploy ettikten sonra aldığın URL'yi buraya gir
   // =====================================================
-  const APPS_SCRIPT_URL = 'BURAYA_APPS_SCRIPT_URL_YAPISTIR';
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzm9PkCG2e1SMwRbWnfUHr2KvVShOdU3AB6xol0pEU-tm41NWvwEmT2Le6mSvpRDi_d/exec';
 
   async function saveResponse(answer, name, surname) {
     const payload = {
