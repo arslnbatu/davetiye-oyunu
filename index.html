@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Merve & Batuhan — Davetiye</title>
   <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet" />
+  <meta property="og:title" content="Merve & Batuhan - Davetiye" />
+  <meta property="og:description" content="Eğlenceli bir oyunla düğün davetiyemizi keşfet!" />
+  <meta property="og:image" content="https://arslnbatu.github.io/davetiye-oyunu/preview.jpg" />
+  <meta property="og:url" content="https://arslnbatu.github.io/davetiye-oyunu
+/" />
+  <meta property="og:type" content="website" />
   <style>
     :root {
       --bg: #0005e7;
@@ -58,7 +64,6 @@
       gap: 16px;
     }
 
-    /* ── Header ── */
     header { text-align: center; width: 100%; }
 
     header h1 {
@@ -77,7 +82,6 @@
       font-style: normal;
     }
 
-    /* ── Separator + etiket ── */
     .separator-wrap {
       display: flex;
       flex-direction: column;
@@ -95,7 +99,6 @@
       opacity: 1;
     }
 
-    /* Pixel art separator SVG */
     .sep-svg {
       display: block;
       image-rendering: pixelated;
@@ -103,7 +106,6 @@
       height: auto;
     }
 
-    /* ── Stats ── */
     .stats {
       display: flex;
       gap: 0;
@@ -125,9 +127,7 @@
       padding: 12px 8px;
     }
 
-    .stat-item + .stat-item {
-      border-left: 2px solid #ffdfac;
-    }
+    .stat-item + .stat-item { border-left: 2px solid #ffdfac; }
 
     .stat-value {
       font-family: 'Jersey 10', sans-serif;
@@ -144,7 +144,6 @@
       color: #ffdfac;
     }
 
-    /* ── Card Grid ── */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -152,11 +151,8 @@
       width: 100%;
     }
 
-    @media (max-width: 380px) {
-      .card-grid { gap: 6px; }
-    }
+    @media (max-width: 380px) { .card-grid { gap: 6px; } }
 
-    /* ── Card ── */
     .card {
       aspect-ratio: 3/4;
       perspective: 600px;
@@ -184,22 +180,13 @@
       overflow: hidden;
     }
 
-    .card-back {
-      background: transparent;
-      border: none;
-    }
+    .card-back { background: transparent; border: none; }
 
-    .card-back-pattern {
-      width: 100%;
-      height: 100%;
-    }
+    .card-back-pattern { width: 100%; height: 100%; }
     .card-back-pattern img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      pointer-events: none;
-      user-select: none;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      pointer-events: none; user-select: none;
     }
 
     .card-front {
@@ -210,12 +197,7 @@
       overflow: hidden;
     }
 
-    .card-front img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+    .card-front img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
     .card.matched .card-front {
       border-color: var(--matched-border);
@@ -229,52 +211,33 @@
     }
     .card.wrong .card-inner { animation: shake 0.35s ease; }
 
-    /* ── Win Banner ── */
     .win-banner {
-      text-align: center;
-      padding: 8px;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: all 0.5s ease 0.3s;
-      pointer-events: none;
+      text-align: center; padding: 8px;
+      opacity: 0; transform: translateY(8px);
+      transition: all 0.5s ease 0.3s; pointer-events: none;
     }
     .win-banner.show { opacity: 1; transform: translateY(0); }
-    .win-banner p {
-      font-size: 11px;
-      color: #f25a2c;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-    }
+    .win-banner p { font-size: 11px; color: #f25a2c; letter-spacing: 3px; text-transform: uppercase; }
 
-    /* ══════════════════════════════
-       POPUP
-    ══════════════════════════════ */
+    /* ══ POPUP ══ */
     .popup-overlay {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.88);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       z-index: 200;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.35s ease;
     }
     .popup-overlay.active { opacity: 1; pointer-events: all; }
 
     .popup-scroll {
-      width: 100%;
-      max-width: 560px;
-      max-height: 94svh;
-      max-height: 94vh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      width: 100%; max-width: 560px;
+      max-height: 94svh; max-height: 94vh;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
       overscroll-behavior: contain;
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       transform: translateY(100%);
       transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
     }
@@ -282,11 +245,9 @@
 
     .popup {
       background: #0a10f0;
-      border: 1px solid #ffdfac;
-      border-bottom: none;
+      border: 1px solid #ffdfac; border-bottom: none;
       border-radius: 20px 20px 0 0;
-      width: 100%;
-      padding: 20px 18px 40px;
+      width: 100%; padding: 20px 18px 40px;
       text-align: center;
       box-shadow: 0 -20px 60px rgba(0,0,0,0.5);
       flex-shrink: 0;
@@ -295,134 +256,89 @@
     @media (min-width: 600px) {
       .popup-overlay { align-items: center; }
       .popup-scroll {
-        max-height: 90svh;
-        max-height: 90vh;
+        max-height: 90svh; max-height: 90vh;
         border-radius: 16px;
         transform: translateY(20px) scale(0.97);
       }
       .popup-overlay.active .popup-scroll { transform: translateY(0) scale(1); }
-      .popup {
-        border-bottom: 1px solid var(--gold-dim);
-        border-radius: 16px;
-        padding: 32px 32px 36px;
-      }
+      .popup { border-bottom: 1px solid var(--gold-dim); border-radius: 16px; padding: 32px 32px 36px; }
     }
 
     .popup-handle {
       width: 36px; height: 4px;
-      background: #ffdfac;
-      border-radius: 2px;
+      background: #ffdfac; border-radius: 2px;
       margin: 0 auto 16px;
     }
     @media (min-width: 600px) { .popup-handle { display: none; } }
 
     .invite-image-wrap {
-      width: 100%;
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: center;
+      width: 100%; margin-bottom: 14px;
+      display: flex; justify-content: center;
     }
     .invite-img {
-      max-width: 100%;
-      max-height: 38svh;
-      max-height: 38vh;
-      width: auto;
-      height: auto;
-      display: block;
-      border-radius: 10px;
-      object-fit: contain;
+      max-width: 100%; max-height: 38svh; max-height: 38vh;
+      width: auto; height: auto; display: block;
+      border-radius: 10px; object-fit: contain;
     }
 
     .popup-event-details {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
+      display: flex; flex-direction: column; gap: 7px;
       margin: 0 0 14px;
       background: rgba(255,223,172,0.08);
       border: 1px solid rgba(255,223,172,0.25);
-      border-radius: 10px;
-      padding: 12px 14px;
+      border-radius: 10px; padding: 12px 14px;
     }
 
     .detail-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-      font-size: clamp(12px, 3.4vw, 14px);
-      color: var(--text);
-      flex-wrap: wrap;
-      line-height: 1.4;
+      display: flex; align-items: center; justify-content: center;
+      gap: 7px; font-size: clamp(12px, 3.4vw, 14px);
+      color: var(--text); flex-wrap: wrap; line-height: 1.4;
     }
     .detail-row .icon { font-size: 14px; flex-shrink: 0; }
     .detail-row strong { color: var(--cream); }
 
     .popup-question {
       font-size: clamp(11px, 3vw, 18px);
-      color: var(--muted);
-      margin-bottom: 12px;
+      color: var(--muted); margin-bottom: 12px;
     }
 
-    /* ── İsim Formu ── */
     .name-form { margin: 0 0 14px; }
     .name-fields { display: flex; gap: 8px; }
 
     .field-wrap {
       flex: 1; min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      text-align: left;
+      display: flex; flex-direction: column; gap: 5px; text-align: left;
     }
     .field-wrap label {
-      font-size: 9px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
+      font-size: 9px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--gold);
     }
     .field-wrap input {
       background: rgba(255,223,172,0.08);
       border: 1px solid var(--card-border);
-      border-radius: 7px;
-      padding: 11px 10px;
+      border-radius: 7px; padding: 11px 10px;
       font-family: 'Jersey 10', sans-serif;
-      font-size: 16px;
-      color: var(--cream);
-      outline: none;
-      transition: border-color 0.2s;
-      width: 100%;
-      -webkit-appearance: none;
+      font-size: 16px; color: var(--cream);
+      outline: none; transition: border-color 0.2s;
+      width: 100%; -webkit-appearance: none;
     }
     .field-wrap input::placeholder { color: var(--muted); font-size: 13px; }
     .field-wrap input:focus { border-color: var(--gold-dim); }
     .field-wrap input.error { border-color: #f25a2c; }
 
-    .name-error {
-      font-size: 11px; color: #f25a2c;
-      margin-top: 6px; display: none; text-align: left;
-    }
+    .name-error { font-size: 11px; color: #f25a2c; margin-top: 6px; display: none; text-align: left; }
     .name-error.show { display: block; }
 
-    /* ── Butonlar ── */
-    .popup-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
+    .popup-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .btn {
-      padding: 13px 10px;
-      border-radius: 8px;
+      padding: 13px 10px; border-radius: 8px;
       font-family: 'Jersey 10', sans-serif;
       font-size: clamp(10px, 2.8vw, 12px);
-      font-weight: 500;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      cursor: pointer;
-      border: none;
+      font-weight: 500; letter-spacing: 0.8px;
+      text-transform: uppercase; cursor: pointer; border: none;
       transition: all 0.2s ease;
-      -webkit-tap-highlight-color: transparent;
-      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent; white-space: nowrap;
     }
     .btn-yes { background: #d8342b; color: #ffdfac; }
     .btn-no  { background: transparent; color: var(--muted); border: 1px solid var(--card-border); }
@@ -435,41 +351,45 @@
       .btn-no:hover  { border-color: var(--muted); color: var(--text); transform: translateY(-2px); }
     }
 
-    /* ── Onay ekranı ── */
     .popup-confirm { display: none; flex-direction: column; align-items: center; gap: 12px; }
     .popup-confirm.show { display: flex; }
-    .popup-main.hidden  { display: none; }
+    .popup-main.hidden { display: none; }
 
     .confirm-title {
       font-family: 'Jersey 10', sans-serif;
       font-size: clamp(20px, 5vw, 26px);
-      font-weight: 600;
-      color: #ffdfac;
+      font-weight: 600; color: #ffdfac;
     }
     .confirm-sub { font-size: clamp(12px, 3vw, 13px); color: var(--muted); }
 
     .btn-close {
-      margin-top: 4px;
-      padding: 10px 24px;
-      border-radius: 8px;
-      background: transparent;
-      border: 1px solid var(--card-border);
-      color: var(--muted);
-      font-family: 'Jersey 10', sans-serif;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
+      margin-top: 4px; padding: 10px 24px; border-radius: 8px;
+      background: transparent; border: 1px solid var(--card-border);
+      color: var(--muted); font-family: 'Jersey 10', sans-serif;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
     .btn-close:active { border-color: var(--gold-dim); color: var(--text); }
     @media (hover: hover) {
       .btn-close:hover { border-color: var(--gold-dim); color: var(--text); }
     }
+
+    /* ══ PİKSEL KONFETİ CANVAS ══ */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      image-rendering: pixelated;
+    }
   </style>
 </head>
 <body>
+
+<canvas id="confetti-canvas"></canvas>
 
 <div class="page-wrapper">
 
@@ -478,10 +398,8 @@
     <p class="subtitle">Merve &amp; Batuhan</p>
   </header>
 
-  <!-- Pixel art separator + etiket -->
   <div class="separator-wrap">
     <svg class="sep-svg" viewBox="0 0 204 36" xmlns="http://www.w3.org/2000/svg">
-      <!-- Sol zincir çizgisi -->
       <rect x="0"  y="16" width="6" height="4" fill="#d8342b" opacity="0.15" rx="1"/>
       <rect x="8"  y="16" width="6" height="4" fill="#d8342b" opacity="0.25" rx="1"/>
       <rect x="16" y="16" width="6" height="4" fill="#d8342b" opacity="0.35" rx="1"/>
@@ -491,17 +409,11 @@
       <rect x="44" y="16" width="6" height="4" fill="#d8342b" opacity="0.8"  rx="1"/>
       <rect x="52" y="16" width="8" height="4" fill="#d8342b" opacity="0.9"  rx="1"/>
       <rect x="62" y="16" width="6" height="4" fill="#d8342b"/>
-
-      <!-- Sol yıldız -->
       <rect x="72" y="14" width="4" height="4" fill="#d8342b"/>
       <rect x="70" y="16" width="4" height="2" fill="#d8342b" opacity="0.6"/>
       <rect x="76" y="16" width="4" height="2" fill="#d8342b" opacity="0.6"/>
       <rect x="72" y="18" width="4" height="4" fill="#d8342b"/>
-
-      <!-- Sol köprü -->
       <rect x="82" y="16" width="6" height="4" fill="#d8342b"/>
-
-      <!-- Merkez kalp (büyük, güzel) -->
       <rect x="94"  y="8"  width="8" height="4" fill="#d8342b"/>
       <rect x="106" y="8"  width="8" height="4" fill="#d8342b"/>
       <rect x="90"  y="12" width="8" height="4" fill="#d8342b"/>
@@ -512,17 +424,11 @@
       <rect x="96"  y="24" width="20" height="4" fill="#d8342b"/>
       <rect x="100" y="28" width="12" height="4" fill="#d8342b"/>
       <rect x="104" y="32" width="4"  height="4" fill="#d8342b"/>
-
-      <!-- Sağ köprü -->
       <rect x="116" y="16" width="6" height="4" fill="#d8342b"/>
-
-      <!-- Sağ yıldız -->
       <rect x="128" y="14" width="4" height="4" fill="#d8342b"/>
       <rect x="126" y="16" width="4" height="2" fill="#d8342b" opacity="0.6"/>
       <rect x="132" y="16" width="4" height="2" fill="#d8342b" opacity="0.6"/>
       <rect x="128" y="18" width="4" height="4" fill="#d8342b"/>
-
-      <!-- Sağ zincir çizgisi -->
       <rect x="138" y="16" width="6"  height="4" fill="#d8342b"/>
       <rect x="146" y="16" width="8"  height="4" fill="#d8342b" opacity="0.9"/>
       <rect x="156" y="16" width="6"  height="4" fill="#d8342b" opacity="0.8"/>
@@ -559,7 +465,7 @@
 
 </div>
 
-<!-- ══════════════ POPUP ══════════════ -->
+<!-- POPUP -->
 <div class="popup-overlay" id="popup-overlay">
   <div class="popup-scroll">
   <div class="popup">
@@ -622,6 +528,172 @@
 </div>
 
 <script>
+  // ══════════════════════════════════════════
+  // PİKSEL KONFETİ
+  // Renk paleti: oyunun renkleri
+  // ══════════════════════════════════════════
+  const CONFETTI_COLORS = [
+    '#f25a2c', // turuncu-kırmızı
+    '#ffdfac', // krem
+    '#d8342b', // koyu kırmızı
+    '#ffb87a', // açık turuncu
+    '#ffffff', // beyaz
+    '#0005e7', // mavi (kontrast için)
+    '#ffd700', // altın
+  ];
+
+  const PIXEL_SIZE = 6; // piksel boyutu (px)
+  const PARTICLE_COUNT = 80;
+
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animId = null;
+
+  // Parçacık şekilleri: kare, kalp pikseli, dikdörtgen
+  const SHAPES = ['square', 'rect_h', 'rect_v', 'heart'];
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function createParticle() {
+    const color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    const shape = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+    return {
+      x: Math.random() * canvas.width,
+      y: -PIXEL_SIZE * 4,
+      vx: (Math.random() - 0.5) * 3,
+      vy: Math.random() * 3 + 2,
+      color,
+      shape,
+      size: PIXEL_SIZE * (Math.random() < 0.3 ? 2 : 1),
+      rotation: Math.floor(Math.random() * 4) * 90, // sadece 0/90/180/270 — pixel art
+      rotSpeed: (Math.random() < 0.5 ? 1 : -1) * (Math.random() < 0.3 ? 2 : 1),
+      alpha: 1,
+      life: 1,
+      decay: Math.random() * 0.008 + 0.004,
+      wobble: Math.random() * Math.PI * 2,
+      wobbleSpeed: Math.random() * 0.08 + 0.02,
+    };
+  }
+
+  function drawPixelHeart(cx, cy, size, color, alpha) {
+    // 5x4 piksel kalp
+    const p = size;
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = color;
+    const pattern = [
+      [0,1,0,1,0],
+      [1,1,1,1,1],
+      [1,1,1,1,1],
+      [0,1,1,1,0],
+      [0,0,1,0,0],
+    ];
+    pattern.forEach((row, ry) => {
+      row.forEach((cell, rx) => {
+        if (cell) ctx.fillRect(cx + (rx - 2) * p, cy + (ry - 2) * p, p, p);
+      });
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  function drawParticle(p) {
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    // Sadece 90° adımlarla döndür — pixel art hissi
+    ctx.rotate((p.rotation * Math.PI) / 180);
+    ctx.globalAlpha = p.alpha;
+
+    if (p.shape === 'heart') {
+      ctx.restore();
+      drawPixelHeart(p.x, p.y, p.size, p.color, p.alpha);
+      return;
+    }
+
+    ctx.fillStyle = p.color;
+    if (p.shape === 'square') {
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+    } else if (p.shape === 'rect_h') {
+      ctx.fillRect(-p.size, -p.size / 4, p.size * 2, p.size / 2);
+    } else if (p.shape === 'rect_v') {
+      ctx.fillRect(-p.size / 4, -p.size, p.size / 2, p.size * 2);
+    }
+
+    ctx.restore();
+  }
+
+  function updateParticle(p) {
+    p.wobble += p.wobbleSpeed;
+    p.x  += p.vx + Math.sin(p.wobble) * 0.8;
+    p.y  += p.vy;
+    p.vy += 0.06; // yerçekimi
+    // Sadece tam adımlarla döndür
+    p.rotation = (p.rotation + p.rotSpeed * 2) % 360;
+    p.life -= p.decay;
+    p.alpha = Math.max(0, p.life);
+  }
+
+  function runConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      updateParticle(p);
+      drawParticle(p);
+    });
+
+    // Ölü veya ekran dışına çıkanları temizle
+    particles = particles.filter(p => p.alpha > 0 && p.y < canvas.height + 50);
+
+    if (particles.length > 0) {
+      animId = requestAnimationFrame(runConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      animId = null;
+    }
+  }
+
+  function launchConfetti() {
+    if (animId) cancelAnimationFrame(animId);
+    particles = [];
+
+    // İlk patlama
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const p = createParticle();
+      // Ortadan fırlat
+      p.x  = canvas.width / 2 + (Math.random() - 0.5) * canvas.width * 0.6;
+      p.y  = canvas.height * 0.3;
+      p.vy = -(Math.random() * 8 + 4); // yukarı fırlat
+      p.vx = (Math.random() - 0.5) * 8;
+      particles.push(p);
+    }
+
+    // 400ms sonra ikinci dalga — yandan gelsin
+    setTimeout(() => {
+      for (let i = 0; i < 40; i++) {
+        const p = createParticle();
+        p.x  = Math.random() < 0.5 ? 0 : canvas.width;
+        p.y  = Math.random() * canvas.height * 0.5;
+        p.vx = p.x === 0 ? Math.random() * 5 + 2 : -(Math.random() * 5 + 2);
+        p.vy = -(Math.random() * 4 + 1);
+        particles.push(p);
+      }
+    }, 400);
+
+    runConfetti();
+
+    // 4 saniye sonra alpha decay hızlandır
+    setTimeout(() => {
+      particles.forEach(p => { p.decay = Math.max(p.decay, 0.02); });
+    }, 4000);
+  }
+
+  // ══════════════════════════════════════════
+  // KART VERİLERİ
+  // ══════════════════════════════════════════
   const CARD_PAIRS = [
     { id: 'special', label: '💍', src1: '1.jpg', src2: '2.jpg' },
     { id: 'b',       label: '🌸', src1: '3.jpg', src2: '3.jpg' },
@@ -736,6 +808,11 @@
     document.getElementById('confirm-sub').textContent   = `${name} ${surname} — cevabınız kaydedildi.`;
     document.getElementById('popup-main').classList.add('hidden');
     document.getElementById('popup-confirm').classList.add('show');
+
+    // Sadece "Evet" seçilince konfeti
+    if (answer.includes('Evet')) {
+      launchConfetti();
+    }
 
     saveResponse(answer, name, surname, attempts);
   }
