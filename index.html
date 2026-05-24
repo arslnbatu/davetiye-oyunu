@@ -796,16 +796,23 @@
     document.getElementById('popup-main').classList.add('hidden');
     document.getElementById('popup-confirm').classList.add('show');
 
-    saveResponse(answer, name, surname);
+    saveResponse(answer, name, surname, attempts);
   }
 
-  async function saveResponse(answer, name, surname) {
+  async function saveResponse(answer, name, surname, score) {
     try {
       await fetch(APPS_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ time: new Date().toLocaleString('tr-TR'), name, surname, answer })
+        body: JSON.stringify({
+          time: new Date().toLocaleString('tr-TR'),
+          name,
+          surname,
+          answer,
+          attempts: score,
+          matched: matchedCount,
+        })
       });
     } catch(e) { console.error('Kayıt hatası:', e); }
   }
