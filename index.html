@@ -443,13 +443,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
-    /* "Evet" tam genişlikte üstte */
-    .btn-yes { grid-column: 1 / -1; }
-
-    @media (min-width: 400px) {
-      .popup-actions { grid-template-columns: repeat(3, 1fr); }
-      .btn-yes { grid-column: auto; }
-    }
 
     .btn {
       padding: 13px 10px;
@@ -605,14 +598,13 @@
 
       <div class="popup-actions">
         <button class="btn btn-yes"   onclick="respond('Evet, geleceğim! 🎉')">Evet, Geleceğim</button>
-        <button class="btn btn-maybe" onclick="respond('Belki gelebilirim 🤔')">Belki</button>
         <button class="btn btn-no"    onclick="respond('Maalesef gelemeyeceğim 😢')">Katılamıyorum</button>
       </div>
     </div>
 
     <!-- Onay mesajı -->
     <div class="popup-confirm" id="popup-confirm">
-      <div class="confirm-icon"  id="confirm-icon">🎊</div>
+      <div class="confirm-icon"  id="confirm-icon" style="display:none"></div>
       <div class="confirm-title" id="confirm-title">Teşekkürler!</div>
       <div class="confirm-sub"   id="confirm-sub">Cevabınız alındı.</div>
       <button class="btn-close" onclick="closePopup()">Kapat</button>
@@ -749,11 +741,7 @@
       return;
     }
 
-    const icon  = answer.includes('Evet') ? '🎊' : answer.includes('Belki') ? '🤔' : '💐';
-    const title = answer.includes('Evet') ? 'Görüşürüz!' : answer.includes('Belki') ? 'Bekleriz sizi!' : 'Üzüldük, iyi günler!';
-
-    document.getElementById('confirm-icon').textContent  = icon;
-    document.getElementById('confirm-title').textContent = title;
+    document.getElementById('confirm-title').textContent = 'Teşekkürler!';
     document.getElementById('confirm-sub').textContent   = `${name} ${surname} — cevabınız kaydedildi.`;
     document.getElementById('popup-main').classList.add('hidden');
     document.getElementById('popup-confirm').classList.add('show');
