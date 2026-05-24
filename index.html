@@ -7,8 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #f9c8d4;
-      --surface: #f0b4c2;
+      --bg: #ffd68f;
+      --surface: #f5c870;
       --gold: #7a0019;
       --gold-light: #a0002a;
       --gold-dim: #9a1030;
@@ -91,24 +91,19 @@
       font-weight: 300;
     }
 
-    /* ── Ornament ── */
+    /* ── Pixel Art Separator ── */
     .ornament {
       display: flex;
       align-items: center;
-      gap: 12px;
-      color: var(--gold-dim);
-      font-size: 16px;
-      width: 100%;
       justify-content: center;
+      gap: 6px;
+      width: 100%;
+      line-height: 0;
     }
-    .ornament::before, .ornament::after {
-      content: '';
-      flex: 1;
-      max-width: 80px;
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold-dim));
+    .ornament svg {
+      display: block;
+      image-rendering: pixelated;
     }
-    .ornament::after { transform: scaleX(-1); }
 
     /* ── Stats ── */
     .stats {
@@ -137,7 +132,7 @@
     .stat-value {
       font-family: 'Poppins', sans-serif;
       font-size: clamp(22px, 5vw, 30px);
-      font-weight: 300;
+      font-weight: 700;
       color: var(--gold-light);
       line-height: 1;
     }
@@ -534,12 +529,52 @@
 <div class="page-wrapper">
 
   <header>
-    <p class="eyebrow">Seni Aramıza Bekliyoruz</p>
-    <h1>Kartları Eşleştir,<br><em>Daveti Keşfet</em></h1>
-    <p class="subtitle">Özel çifti bul ve sürprizi açığa çıkar</p>
+    <h1>Düğünümüze Davetlisiniz</h1>
+    <p class="subtitle">Merve &amp; Batuhan</p>
   </header>
 
-  <div class="ornament">✦</div>
+  <div class="ornament">
+    <svg width="180" height="12" viewBox="0 0 180 12" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated">
+      <!-- sol piksel çizgi -->
+      <rect x="0"  y="5" width="4" height="2" fill="#7a0019" opacity="0.25"/>
+      <rect x="6"  y="5" width="4" height="2" fill="#7a0019" opacity="0.35"/>
+      <rect x="12" y="5" width="4" height="2" fill="#7a0019" opacity="0.45"/>
+      <rect x="18" y="5" width="4" height="2" fill="#7a0019" opacity="0.55"/>
+      <rect x="24" y="5" width="4" height="2" fill="#7a0019" opacity="0.65"/>
+      <rect x="30" y="4" width="2" height="4" fill="#7a0019" opacity="0.75"/>
+      <rect x="34" y="3" width="2" height="6" fill="#7a0019" opacity="0.85"/>
+      <rect x="38" y="5" width="4" height="2" fill="#7a0019" opacity="0.9"/>
+      <rect x="44" y="5" width="6" height="2" fill="#7a0019"/>
+      <!-- orta pixel diamond -->
+      <rect x="52" y="4" width="2" height="2" fill="#7a0019"/>
+      <rect x="50" y="5" width="2" height="2" fill="#7a0019"/>
+      <rect x="54" y="5" width="2" height="2" fill="#7a0019"/>
+      <rect x="52" y="6" width="2" height="2" fill="#7a0019"/>
+      <!-- orta pixel kalp -->
+      <rect x="64" y="3" width="2" height="2" fill="#7a0019"/>
+      <rect x="68" y="3" width="2" height="2" fill="#7a0019"/>
+      <rect x="62" y="5" width="2" height="2" fill="#7a0019"/>
+      <rect x="64" y="5" width="6" height="2" fill="#7a0019"/>
+      <rect x="70" y="5" width="2" height="2" fill="#7a0019"/>
+      <rect x="64" y="7" width="4" height="2" fill="#7a0019"/>
+      <rect x="66" y="9" width="2" height="2" fill="#7a0019"/>
+      <!-- orta pixel diamond -->
+      <rect x="78" y="4" width="2" height="2" fill="#7a0019"/>
+      <rect x="76" y="5" width="2" height="2" fill="#7a0019"/>
+      <rect x="80" y="5" width="2" height="2" fill="#7a0019"/>
+      <rect x="78" y="6" width="2" height="2" fill="#7a0019"/>
+      <!-- sağ taraf (ayna) -->
+      <rect x="86" y="5" width="6" height="2" fill="#7a0019"/>
+      <rect x="94" y="5" width="4" height="2" fill="#7a0019" opacity="0.9"/>
+      <rect x="100" y="3" width="2" height="6" fill="#7a0019" opacity="0.85"/>
+      <rect x="104" y="4" width="2" height="4" fill="#7a0019" opacity="0.75"/>
+      <rect x="108" y="5" width="4" height="2" fill="#7a0019" opacity="0.65"/>
+      <rect x="114" y="5" width="4" height="2" fill="#7a0019" opacity="0.55"/>
+      <rect x="120" y="5" width="4" height="2" fill="#7a0019" opacity="0.45"/>
+      <rect x="126" y="5" width="4" height="2" fill="#7a0019" opacity="0.35"/>
+      <rect x="132" y="5" width="4" height="2" fill="#7a0019" opacity="0.25"/>
+    </svg>
+  </div>
 
   <div class="stats">
     <div class="stat-item">
@@ -576,7 +611,26 @@
         <img src="20.png" alt="Davetiye" class="invite-img" />
       </div>
 
-      <p class="popup-question">Bu özel günümüzde bize eşlik edecek misiniz?</p>
+      <div class="popup-event-details">
+        <div class="detail-row">
+          <span class="icon">💍</span>
+          <span><strong>Merve</strong> &amp; <strong>Batuhan</strong></span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">📅</span>
+          <span><strong>6 Haziran 2026</strong> · Cumartesi</span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">🕕</span>
+          <span>Saat <strong>18:00 – 22:00</strong></span>
+        </div>
+        <div class="detail-row">
+          <span class="icon">📍</span>
+          <span><strong>Eva Garden</strong> · Bahçeköy</span>
+        </div>
+      </div>
+
+      <p class="popup-question">Katılım durumunuzu seçebilirsiniz.</p>
 
       <div class="name-form">
         <div class="name-fields">
@@ -619,7 +673,7 @@
   //   d çifti       → 7.jpg + 8.jpg
   // ══════════════════════════════════════════
   const CARD_PAIRS = [
-    { id: 'special', label: '💍', src1: '1.jpg', src2: '1.jpg' },
+    { id: 'special', label: '💍', src1: '1.jpg', src2: '2.jpg' },
     { id: 'b',       label: '🌸', src1: '3.jpg', src2: '3.jpg' },
     { id: 'c',       label: '🕯️', src1: '4.jpg', src2: '4.jpg' },
     { id: 'd',       label: '🥂', src1: '5.jpg', src2: '5.jpg' },
