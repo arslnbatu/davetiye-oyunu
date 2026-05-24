@@ -399,6 +399,18 @@
     .detail-row .icon { font-size: 14px; flex-shrink: 0; }
     .detail-row strong { color: var(--cream); }
 
+    .invite-image-wrap {
+      width: 100%;
+      margin-bottom: 16px;
+    }
+    .invite-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
     .popup-question {
       font-size: clamp(12px, 3.4vw, 13px);
       color: var(--muted);
@@ -558,35 +570,8 @@
 
     <!-- Ana davetiye -->
     <div class="popup-main" id="popup-main">
-      <span class="popup-badge">✦ Özel Davetiye ✦</span>
-
-      <h2>Merve & Batuhan'ın<br><em>Düğününe Davetlisiniz</em></h2>
-
-      <div class="popup-divider"></div>
-
-      <p class="popup-invite-text">
-        Sevdiklerimizle paylaşmak istediğimiz<br>
-        bu özel günde sizi aramızda<br>
-        görmekten mutluluk duyarız.
-      </p>
-
-      <div class="popup-event-details">
-        <div class="detail-row">
-          <span class="icon">💍</span>
-          <span><strong>Merve</strong> &amp; <strong>Batuhan</strong></span>
-        </div>
-        <div class="detail-row">
-          <span class="icon">📅</span>
-          <span><strong>6 Haziran 2026</strong> · Cumartesi</span>
-        </div>
-        <div class="detail-row">
-          <span class="icon">🕕</span>
-          <span>Saat <strong>18:00 – 22:00</strong></span>
-        </div>
-        <div class="detail-row">
-          <span class="icon">📍</span>
-          <span><strong>Eva Garden</strong> · Bahçeköy</span>
-        </div>
+      <div class="invite-image-wrap">
+        <img src="20.png" alt="Davetiye" class="invite-img" />
       </div>
 
       <p class="popup-question">Bu özel günümüzde bize eşlik edecek misiniz?</p>
@@ -633,9 +618,9 @@
   // ══════════════════════════════════════════
   const CARD_PAIRS = [
     { id: 'special', label: '💍', src1: '1.jpg', src2: '2.jpg' },
-    { id: 'b',       label: '🌸', src1: '3.jpg', src2: '3.jpg' },
-    { id: 'c',       label: '🕯️', src1: '4.jpg', src2: '4.jpg' },
-    { id: 'd',       label: '🥂', src1: '5.jpg', src2: '5.jpg' },
+    { id: 'b',       label: '🌸', src1: '3.jpg', src2: '4.jpg' },
+    { id: 'c',       label: '🕯️', src1: '5.jpg', src2: '6.jpg' },
+    { id: 'd',       label: '🥂', src1: '7.jpg', src2: '8.jpg' },
   ];
 
   // ══════════════════════════════════════════
